@@ -1,0 +1,52 @@
+//
+//  Queue.template
+//  Assignment 2
+//
+//  Created by Adrian Brown
+//  Student c3145942
+//  SENG1120 10 / 10 / 2011
+//
+    
+    template <typename value_type>
+    Queue<value_type>::Queue()
+    {
+        queue_data = new LinkedList<value_type>(); // Instantiate new object in the heap
+    }
+    
+    template <typename value_type>
+    Queue<value_type>::~Queue()
+    {
+        delete queue_data; // Delete LinkedList
+        queue_data = NULL; // Remove pointer to memory location
+    }
+
+    template <typename value_type>
+    void Queue<value_type>::Enqueue(value_type object)
+    {
+        if (size() == 0) // Queue currently is empty
+        {
+            queue_data -> listHeadInsert(object); // Insert object data as head
+        }
+        else // Queue has data in it
+        {
+            queue_data -> listInsert(queue_data -> getTailPointer(), object); // Insert to end of queue
+        }
+    }
+
+    template <typename value_type>
+    void Queue<value_type>::Dequeue()
+    {
+        queue_data -> listRemove(queue_data -> getHeadPointer()); // Remove head
+    }
+
+    template <typename value_type>
+    int Queue<value_type>::size()
+    {
+        return queue_data -> listLength(); // Return queue size
+    }
+
+    template <typename value_type>
+    Node<value_type>* Queue<value_type>::getFront() const
+    {
+        return queue_data -> getHeadPointer(); // Get pointer to front of the queue
+    }

@@ -1,0 +1,110 @@
+//
+//  Train.template
+//  Assignment 2
+//
+//  Created by Adrian Brown
+//  Student c3145942
+//  SENG1120 10 / 10 / 2011
+//
+
+    template <typename value_type>
+    Train<value_type>::Train()
+    {
+        carriages = new LinkedList<value_type>(); // Instantiate new object in the heap
+    }
+    
+    template <typename value_type>
+    Train<value_type>::~Train()
+    {
+        delete carriages; // Delete linked list
+    }
+    
+    template <typename value_type>
+    Train<value_type>::Train(int arr[])
+    {
+        carriages = new LinkedList<value_type>(); // Instantiate new object in the heap
+        
+        for (int i = 0; arr[i] != -1; i++) // Loop until end of array is reached (marked by -1)
+        {
+            addLoad(arr[i], i + 1); // Add array position's value to new node
+        }
+    }
+    
+    template <typename value_type>
+    void Train<value_type>::addLoad(value_type i, int j)
+    {
+        if (j > (carriages -> listLength() + 1) ) // If there is no pointer to reference (Error handling)
+        {
+            cout << "ERROR: You can't make a " << j << "th carriage if there are only " << carriages -> listLength() << endl;
+        }
+        else if (j == 1 && carriages -> getHeadPointer() == NULL) // Linked list is empty
+        {
+            carriages -> listHeadInsert(i); // Set value 'i' as the head node
+        }
+        else if (carriages -> getNode(j - 1) -> link() == NULL) // Node has not been created yet
+        {
+            carriages -> listInsert(carriages -> getNode(j - 1), i); // Create new node and enter data
+        }
+        else // Node already exists
+        {
+            carriages -> getNode(j) -> setData( (carriages -> getNode(j) -> getData()) + i ); // Add i to what is already there
+        }
+    }
+    
+    template <typename value_type>
+    void Train<value_type>::removeLoad(value_type i, int j)
+    {
+        Node<value_type>* node_pointer = carriages -> getNode(j); // Get pointer for the jth node
+        if (node_pointer != NULL) // if the jth node exists
+        {
+            if ( i > (node_pointer -> getData()) ) // There is less data in the node than i
+            {
+                node_pointer -> setData(0); // Set carriage/node load to 0
+            }
+            else
+            {
+                node_pointer -> setData(node_pointer -> getData() - i); // Subtract the load from the carriage/node
+            }
+        }
+    }
+    
+    template <typename value_type>
+    int Train<value_type>::size() const
+    {
+        return carriages -> listLength(); // Retrieves Linked List node count
+    }
+    
+    template <typename value_type>
+    int Train<value_type>::totalLoad() const
+    {
+        Node<value_type>* node_pointer = carriages -> getHeadPointer(); // Get pointer from the head node
+        int total = 0; // Counter
+        for (int i = 1; i <= size(); i++) // Loop for length of object
+        {
+            total += node_pointer -> getData(); // Add nodes value to the counter
+            node_pointer = node_pointer -> link(); // Set node pointer to the next node
+        }
+        return total; // Return trains total load
+    }
+    
+    template <typename value_type>
+    int Train<value_type>::countEmpty() const
+    {
+        Node<value_type>* node_pointer = carriages -> getHeadPointer(); // Get pointer from the head node
+        int total = 0; // Counter
+        for (int i = 1; i <= size(); i++) // Loop for length of object
+        {
+            if (node_pointer -> getData() == 0) // If carriage/node is empty (equals 0)
+            {
+                total++; // Increment count
+            }
+            node_pointer = node_pointer -> link(); // Set node pointer to the next node
+        }
+        return total; // Returns count
+    }
+
+    template <typename value_type>
+    Node<value_type>* Train<value_type>::getFront() const
+    {
+        return carriages -> getHeadPointer(); // Return pointer to head
+    }

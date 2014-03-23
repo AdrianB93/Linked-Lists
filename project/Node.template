@@ -1,0 +1,46 @@
+//
+//  Node.template
+//  Assignment 2
+//
+//  Created by Adrian Brown
+//  Student c3145942
+//  SENG1120 10 / 10 / 2011
+//
+
+    template <typename value_type>
+    Node<value_type>::Node(const value_type &initial_data, Node* initial_link)
+    {
+        data = initial_data; // Sets data as the provided parameter or it's default
+        next = initial_link; // Sets the link as the provided parameter or it's default
+    }
+    
+    template <typename value_type>
+    Node <value_type>::~Node()
+    {
+        //delete next; // Calls this same destructor in the next node for the object to be deleted
+        next = NULL; // Remove pointer address
+    }
+    
+    template <typename value_type>
+    void Node <value_type>::setData(const value_type &new_data)
+    {
+        data = new_data; // Sets the data stored in this node
+    }
+    
+    template <typename value_type>
+    void Node <value_type>::setLink(Node *new_link)
+    {
+        next = new_link; // Sets a pointer to the next node it is to be linked to
+    }
+    
+    template <typename value_type>
+    value_type Node<value_type>::getData() const
+    {
+        return data; // Returns the data stored in this node
+    }
+    
+    template <typename value_type>
+    Node<value_type>* Node<value_type>::link() const
+    {
+        return next; // Returns the pointer to the next node
+    }

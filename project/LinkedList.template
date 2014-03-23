@@ -1,0 +1,107 @@
+//
+//  LinkedList.template
+//  Assignment 2
+//
+//  Created by Adrian Brown
+//  Student c3145942
+//  SENG1120 10 / 10 / 2011
+//
+
+    template <typename value_type>
+    LinkedList<value_type>::LinkedList()
+    {
+        head_pointer = NULL; // Shows compiler it is pointing to garbage
+        tail_pointer = NULL; // Shows compiler it is pointing to garbage
+    }
+    
+    template <typename value_type>
+    LinkedList<value_type>::~LinkedList()
+    {
+        delete head_pointer; // Delete head pointer with all links to deconstruct after it
+    }
+    
+    template <typename value_type>
+    void LinkedList<value_type>::listHeadInsert(value_type entry)
+    {
+        head_pointer = new Node<value_type>(entry, head_pointer); // Adds node to the front
+        if (tail_pointer == NULL)
+        {
+            tail_pointer = head_pointer; // Both pointers pointing to the same node
+        }
+    }
+    
+    template <typename value_type>
+    void LinkedList<value_type>::listInsert (Node<value_type> *previous_pointer, const value_type &entry)
+    {
+        Node<value_type> *add_pointer;
+        add_pointer = new Node<value_type>(entry, previous_pointer -> link()); // Enters data to node. Sets link as the previous nodes link
+        previous_pointer -> setLink(add_pointer); // Sets the node link to add_pointer
+        
+        if (add_pointer -> link() == NULL)
+        {
+            tail_pointer = add_pointer; // If it is at the end, tail pointer should point to it
+        }
+    }
+
+    template <typename value_type>
+    void LinkedList<value_type>::listRemove(Node<value_type> *pointer)
+    {
+        if (pointer == head_pointer)
+        {
+            if (listLength() == 1) // Only the head pointer remains
+            {
+                head_pointer = NULL;
+                tail_pointer = NULL;
+                //cout << endl << "LENGTH OF LIST IS NOW " << listLength() << "!!!!" << endl;
+            }
+            else
+            {
+                head_pointer = pointer -> link();
+            }
+        }
+        else
+        {
+            Node<value_type>* previous_pointer = head_pointer; // Search from start of list
+            while(previous_pointer -> link() != pointer) // Loops until the previous pointer is found
+            {
+                previous_pointer = previous_pointer -> link(); // Move onto next pointer
+            }
+            
+            previous_pointer -> setLink(pointer -> link()); // Link the previous node to 'pointers' link
+        }
+        delete pointer; // Remove from heap
+    }
+
+    template <typename value_type>
+    int LinkedList<value_type>::listLength() const
+    {
+        int length = 0; // Counter
+        for (Node<value_type>* node_pointer = head_pointer; node_pointer != NULL; node_pointer = node_pointer -> link()) // Loop to end of list
+        {
+            length++; // Increment counter
+        }
+        return length; // Return count
+    }
+    
+    template <typename value_type>
+    Node<value_type>* LinkedList<value_type>::getHeadPointer() const
+    {
+        return head_pointer; // Return pointer
+    }
+
+    template <typename value_type>
+    Node<value_type>* LinkedList<value_type>::getTailPointer() const
+    {
+        return tail_pointer; // Return pointer
+    }
+    
+    template <typename value_type>
+    Node<value_type>* LinkedList<value_type>::getNode(int node) const
+    {
+        Node<value_type>* node_pointer = head_pointer; // Get pointer from the head node (Can't change object, can change address)
+        for (int i = 1; i < node; i++) // Loop to follow the links i amount of times
+        {
+            node_pointer = node_pointer -> link(); // Set pointer to next node
+        }
+        return node_pointer; // Return pointer location
+    }
